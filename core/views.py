@@ -5,4 +5,4 @@ def product_list(request):
     context = {
         'products': Product.objects.all()
     }
-    return render(request, "product_list.html", context)
+    return render(request, "shop.html", context)
