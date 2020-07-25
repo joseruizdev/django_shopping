@@ -1,16 +1,40 @@
 from django.db import models
 from django.conf import settings
+from django.shortcuts import reverse
+
+CATEGORY_CHOICES = (
+    ('S', 'Shirt'),
+    ('SW', 'Sports Wear'),
+    ('OW', 'Outwear')
+)
+
+LABEL_CHOICES = (
+    ('new', 'New'),
+    ('sold-out', 'Sold Out')
+)
 
 class Product(models.Model):
     name = models.CharField(max_length=100)
+    description = models.TextField()
+    price = models.DecimalField(max_digits=7, decimal_places=2)
+    discount_price = models.DecimalField(max_digits=7, decimal_places=2, blank=True, null=True)
+    # TODO: Category Model and foreign key
+    label = models.CharField(choices=LABEL_CHOICES, max_length=20, blank=True, null=True)
+    slug = models.SlugField(default='product-slug')
 
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse(
+            'core:product',
+            kwargs={
+                'slug': self.slug
+            }
+        )
+
 class OrderProduct(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    description = models.TextField()
-    price = models.DecimalField(max_digits=7, decimal_places=2)
 
     def __str__(self):
         return f"Product: {self.product.name}"

@@ -3,16 +3,25 @@
 		<div class="row">
             {% load static %}
 
-            {% for product in products %}
+            {% for product in object_list %}
 			<div class="col-md-4">
 				<div class="product-item">
 					<div class="product-thumb">
-                        <span class="bage">Sale {{ product.id }}</span>
+
+                        {% if product.get_label_display  %}
+                        <span class="bage">{{ product.get_label_display }}</span>
+                        {% endif %}
+
+                        {% if product.discount_price %}
+                        <span class="bage">Sale</span>
+                        {% endif %}
+
                         {% if product.name == "Polo Shirt" %}
                         <img class="img-responsive" src="{% static 'images/shop/products/product-1.jpg' %}" alt="{{ product.name }}" />
                         {% else %}
                         <img class="img-responsive" src="{% static 'images/shop/products/product-2.jpg' %}" alt="{{ product.name }}" />
                         {% endif %}
+
 						<div class="preview-meta">
 							<ul>
 								<li>
@@ -30,8 +39,14 @@
                       	</div>
 					</div>
 					<div class="product-content">
-						<h4><a href="product-single.html">{{ product.name }}</a></h4>
-						<p class="price">${{ product.price }}</p>
+                        <h4><a href="{{ product.get_absolute_url }}">{{ product.name }}</a></h4>
+                        
+                        {% if product.discount_price %}
+                        <del class="price">${{ product.price }}</del>
+                        <p class="price">${{ product.discount_price }}</p>
+                        {% else %}
+                        <p class="price">${{ product.price }}</p>
+                        {% endif %}
 					</div>
 				</div>
 			</div>
@@ -57,12 +72,18 @@
                                 <div class="col-md-4 col-sm-6 col-xs-12">
                                     <div class="product-short-details">
                                         <h2 class="product-title">{{ product.name }}</h2>
+
+                                        {% if product.discount_price %}
+                                        <p class="product-price">${{ product.discount_price }}</p>
+                                        {% else %}
                                         <p class="product-price">${{ product.price }}</p>
+                                        {% endif %}
+
                                         <p class="product-short-description">
-                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem iusto nihil cum. Illo laborum numquam rem aut officia dicta cumque.
+                                            {{ product.description }}
                                         </p>
                                         <a href="cart.html" class="btn btn-main">Add To Cart</a>
-                                        <a href="product-single.html" class="btn btn-transparent">View Product Details</a>
+                                        <a href="{{ product.get_absolute_url }}" class="btn btn-transparent">View Product Details</a>
                                     </div>
                                 </div>
                             </div>
