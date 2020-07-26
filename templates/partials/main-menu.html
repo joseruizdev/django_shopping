@@ -139,3 +139,21 @@
 	    </div><!-- / .container -->
 	</nav>
 </section>
+
+<div class="container">
+	{% if messages %}
+		{% for message in messages %}
+			{% if message.tags == 'error' %}
+				<div class="alert alert-danger alert-common alert-dismissible " role="alert">
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+					<i class="fas fa-times"></i><span>{{ message }}</span>
+				</div>
+			{% else %}
+				<div class="alert alert-{{ message.tags }} alert-common alert-dismissible " role="alert">
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+					<i class="fas fa-check"></i><span>{{ message }}</span>
+				</div>
+			{% endif %}
+		{% endfor %}
+	{% endif %}
+</div>
