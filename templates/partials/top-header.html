@@ -1,15 +1,10 @@
 <section class="top-header">
 	<div class="container">
 		<div class="row">
-			<div class="col-md-4 col-xs-12 col-sm-4">
-				<div class="contact-number">
-					<i class="tf-ion-ios-telephone"></i>
-					<span>0129- 12323-123123</span>
-				</div>
-			</div>
-			<div class="col-md-4 col-xs-12 col-sm-4">
+			
+			<div class="col-md-6 col-xs-12 col-sm-6">
 				<!-- Site Logo -->
-				<div class="logo text-center">
+				<div class="logo text-left">
 					<a href="index.html">
 						<!-- replace logo here -->
 						<svg width="135px" height="29px" viewBox="0 0 155 29" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -24,11 +19,12 @@
 					</a>
 				</div>
 			</div>
-			<div class="col-md-4 col-xs-12 col-sm-4">
+			<div class="col-md-6 col-xs-12 col-sm-6">
 			<!-- Cart -->
 			<ul class="top-menu text-right list-inline">
+				{% if request.user.is_authenticated %}
 	          <li class="dropdown cart-nav dropdown-slide">
-	            <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"><i class="tf-ion-android-cart"></i>Cart</a>
+	            <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"><i class="fas fa-shopping-cart"></i> Cart</a>
 	            <div class="dropdown-menu cart-dropdown">
 	            	<!-- Cart Item -->
 	            	<div class="media">
@@ -75,11 +71,38 @@
 
 	          <!-- Search -->
 	          <li class="dropdown search dropdown-slide">
-	            <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"><i class="tf-ion-ios-search-strong"></i> Search</a>
+	            <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"><i class="fas fa-search"></i> Search</a>
 	            <ul class="dropdown-menu search-dropdown">
 	              <li><form action="post"><input type="search" class="form-control" placeholder="Search..."></form></li>
 	            </ul>
-	          </li><!-- / Search -->
+				</li><!-- / Search -->
+			  
+			  <li class="dropdown dropdown-slide">
+				  <a href="" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"><i class="fas fa-user-circle"></i> Account</a>
+				  <ul class="dropdown-menu">
+					<li><a href="{% url 'account_logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+				  </ul>
+			  </li>
+
+			  {% else %}
+			  	
+				  
+				  <li class="dropdown">
+					  <a href="{% url 'account_login' %}"><i class="fas fa-sign-in-alt"></i> Login</a>
+				  </li>
+
+				  <li class="dropdown">
+					  <a href="{% url 'account_signup' %}"><i class="fas fa-user-plus"></i> Create An Account</a>
+				  </li>
+
+				  <!-- Search -->
+				  <li class="dropdown search dropdown-slide">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"><i class="fas fa-search"></i> Search</a>
+					<ul class="dropdown-menu search-dropdown">
+					  <li><form action="post"><input type="search" class="form-control" placeholder="Search..."></form></li>
+					</ul>
+					</li><!-- / Search -->
+			  {% endif %}
 
 	          <!-- Languages -->
 	          <li class="commonSelect">

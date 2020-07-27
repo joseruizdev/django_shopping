@@ -16,11 +16,7 @@
                         <span class="bage">Sale</span>
                         {% endif %}
 
-                        {% if product.name == "Polo Shirt" %}
-                        <img class="img-responsive" src="{% static 'images/shop/products/product-1.jpg' %}" alt="{{ product.name }}" />
-                        {% else %}
-                        <img class="img-responsive" src="{% static 'images/shop/products/product-2.jpg' %}" alt="{{ product.name }}" />
-                        {% endif %}
+                        <img class="img-responsive" src="{{ product.image_1.url }}" alt="{{ product.name }}" />
 
 						<div class="preview-meta">
 							<ul>
@@ -29,9 +25,9 @@
 										<i class="tf-ion-ios-search-strong"></i>
 									</span>
 								</li>
-								<li>
+								<!-- <li>
 			                        <a href="#" ><i class="tf-ion-ios-heart"></i></a>
-								</li>
+								</li> -->
 								<li>
 									<a href="{{ product.get_add_to_cart_url }}"><i class="tf-ion-android-cart"></i></a>
 								</li>
@@ -62,11 +58,7 @@
                             <div class="row">
                                 <div class="col-md-8 col-sm-6 col-xs-12">
                                     <div class="modal-image">
-                                        {% if product.name == "Polo Shirt" %}
-                                        <img class="img-responsive" src="{% static 'images/shop/products/product-1.jpg' %}" alt="{{ product.name }}" />
-                                        {% else %}
-                                        <img class="img-responsive" src="{% static 'images/shop/products/product-2.jpg' %}" alt="{{ product.name }}" />
-                                        {% endif %}
+                                        <img class="img-responsive" src="{{ product.image_1.url }}" alt="{{ product.name }}" />
                                     </div>
                                 </div>
                                 <div class="col-md-4 col-sm-6 col-xs-12">
@@ -93,6 +85,32 @@
             </div><!-- /.modal -->
             {% endfor %}
 
-		</div>
+        </div>
+    </div>
+    
+    {% if is_paginated %}
+    <div class="text-center">
+        <nav aria-label="Page navigation example text-center">
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="btn btn-main" href="?page={{ page_obj.previous_page_number }}" style="color: black; background-color: transparent; border-top-left-radius: 0%; border-bottom-left-radius: 0%; border-top-right-radius: 0%; border-bottom-right-radius: 0%;"><i class="fas fa-arrow-alt-circle-left"></i> Previous</i></a>
+                </li>
+                {% endif %}
+                <li class="page-item">
+                    <a class="btn btn-main" href="#" style="color: black; background-color: transparent; border-top-left-radius: 0%; border-bottom-left-radius: 0%; border-top-right-radius: 0%; border-bottom-right-radius: 0%;">{{ page_obj.number }}</i></a>
+                </li>
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="btn btn-main" href="?page={{ page_obj.next_page_number }}" style="color: black; background-color: transparent; border-top-left-radius: 0%; border-bottom-left-radius: 0%; border-top-right-radius: 0%; border-bottom-right-radius: 0%;">Next <i class="fas fa-arrow-alt-circle-right"></i></a>
+                </li>
+                {% endif %}
+
+            </ul>
+        </nav>
+    </div>
+    
+    {% endif %}
+
 	</div>
 </section>

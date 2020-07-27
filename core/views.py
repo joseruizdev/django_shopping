@@ -4,6 +4,10 @@ from core.models import Product, OrderProduct, Order
 from django.utils import timezone
 from django.contrib import messages
 
+class Home(ListView):
+    model = Product
+    template_name = 'home.html'
+
 def product_list(request):
     context = {
         'products': Product.objects.all()
@@ -12,6 +16,7 @@ def product_list(request):
 
 class ShopView(ListView):
     model = Product
+    paginate_by = 12
     template_name = 'shop.html'
 
 class ProductView(DetailView):
@@ -58,7 +63,8 @@ def remove_from_cart(request, slug):
             # If exists, get the OrderProduct.
             order_product = OrderProduct.objects.filter(product=product, user=request.user, ordered=False)[0]
             # Remove OrderProduct from Order
-            order.products.remove(order_product)
+            # order.products.remove(order_product)
+            order_product.delete()
             messages.warning(request, "This item was removed from your cart!")
         else:
             messages.error(request, "This item wasn't in your cart!")

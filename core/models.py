@@ -21,6 +21,9 @@ class Product(models.Model):
     # TODO: Category Model and foreign key
     label = models.CharField(choices=LABEL_CHOICES, max_length=20, blank=True, null=True)
     slug = models.SlugField(default='product-slug')
+    image_1 = models.ImageField(null=True, upload_to='products')
+    image_2 = models.ImageField(null=True, blank=True, upload_to='products')
+    image_3 = models.ImageField(null=True, blank=True, upload_to='products')
 
     def __str__(self):
         return self.name
