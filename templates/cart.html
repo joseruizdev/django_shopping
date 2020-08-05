@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block head_title %}
+Cart
+{% endblock head_title %}
+
+{% block content %}
+
+{% include "partials/top-header.html" %}
+
+{% include "partials/main-menu.html" %}
+
+<section class="page-header">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="content">
+					<h1 class="page-name">Cart</h1>
+					<ol class="breadcrumb">
+						<li><a href="#">Home</a></li>
+						<li class="active">cart</li>
+					</ol>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<div class="page-wrapper">
+  <div class="cart shopping">
+    <div class="">
+      <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+          <div class="block">
+            <div class="product-list">
+              <form method="post">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th class="">Product</th>
+                      <th class="">Unit Price</th>
+                      <th class="">Quantity</th>
+                      <th class="">Total Price</th>
+                      <th class="">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for order_product in object.products.all %}
+                    <tr class="">
+                      <td class="">
+                        <div class="product-info">
+                          <img width="80" src="{{ order_product.product.image_1.url }}" alt="" />
+                          <a href="">{{ order_product.product.name }}</a>
+                        </div>
+                      </td>
+
+                      {% if order_product.product.discount_price %}
+                      <td class="">${{ order_product.product.discount_price }}</td>
+                      {% else %}
+                      <td class="">${{ order_product.product.price }}</td>
+                      {% endif %}
+                      
+                      <td class="">
+                        <a class="" href="{% url 'core:remove-one-product-from-cart' order_product.product.slug %}"><i class="fas fa-minus-circle"></i></a>
+                        {{ order_product.quantity }}
+                        <a class="" href="{{ order_product.product.get_add_to_cart_url }}"><i class="fas fa-plus-circle"></i></a>
+                      </td>
+
+                      {% if order_product.product.discount_price %}
+                      <td>
+                        ${{ order_product.get_total_product_discount_price }}
+                        <!-- <small class="text-muted">Savings: {{ order_product.get_amount_saved }}</small> -->
+                      </td>
+                      {% else %}
+                      <td>${{ order_product.get_total_product_price }}</td>
+                      {% endif %}
+
+                      <td class="">
+                        <a class="product-remove" href="{{ order_product.product.get_remove_from_cart_url }}">Remove</a>
+                      </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                      <td colspan="5">
+                        <h3>Your cart is empty!</h3>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                      <td class="text-right" colspan="3">
+                        <h3>Total:</h3>
+                      </td>
+                      <td>
+                        <h3>${{ object.get_amount_to_pay }}</h3>
+                      </td>
+                      <td>
+                        <small>You saved: ${{ object.get_total_saved }}</small>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <a href="{% url 'core:shop' %}" class="btn btn-main">Go to shop</a>
+                <a href="checkout.html" class="btn btn-main pull-right">Checkout</a>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% include "partials/footer.html" %}
+
+{% endblock content %}

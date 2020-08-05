@@ -74,7 +74,7 @@
                                         <p class="product-short-description">
                                             {{ product.description }}
                                         </p>
-                                        <a href="cart.html" class="btn btn-main">Add To Cart</a>
+                                        <a href="{{ product.get_add_to_cart_url }}" class="btn btn-main">Add To Cart</a>
                                         <a href="{{ product.get_absolute_url }}" class="btn btn-transparent">View Product Details</a>
                                     </div>
                                 </div>
@@ -87,7 +87,7 @@
 
         </div>
     </div>
-    
+
     {% if is_paginated %}
     <div class="text-center">
         <nav aria-label="Page navigation example text-center">

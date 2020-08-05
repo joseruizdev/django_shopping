@@ -27,7 +27,7 @@ SECRET_KEY = '^qykogc58l#en!7t5pw453yduf@t#zrx8hrvul*xecw=pt$9$('
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -150,6 +150,7 @@ AUTHENTICATION_BACKENDS = [
 
 SITE_ID = 1
 
+# TODO: Email Service Provider
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = True

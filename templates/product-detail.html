@@ -1,5 +1,10 @@
 {% extends "base.html" %}
 
+{% block head_title %}
+    {{ product.name }}
+{% endblock head_title %}
+
+
 {% block content %}
 
 {% include "partials/top-header.html" %}

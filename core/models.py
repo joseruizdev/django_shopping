@@ -61,6 +61,24 @@ class OrderProduct(models.Model):
     def __str__(self):
         return f"{self.quantity} of {self.product.name}"
 
+    def get_total_product_price(self):
+        return self.quantity * self.product.price
+
+    def get_total_product_discount_price(self):
+        return self.quantity * self.product.discount_price
+
+    def get_amount_saved(self):
+        if self.product.discount_price:
+            return self.get_total_product_price() - self.get_total_product_discount_price()
+        else:
+            return 0
+    
+    def get_final_price(self):
+        if self.product.discount_price:
+            return self.get_total_product_discount_price()
+        else:
+            return self.get_total_product_price()
+
 class Order(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,  on_delete=models.CASCADE)
     start_date = models.DateTimeField(auto_now_add=True)
@@ -70,3 +88,15 @@ class Order(models.Model):
 
     def __str__(self):
         return f"Ordered by {self.user.username}"
+
+    def get_amount_to_pay(self):
+        total = 0
+        for order_product in self.products.all():
+            total += order_product.get_final_price()
+        return total
+    
+    def get_total_saved(self):
+        total = 0
+        for order_product in self.products.all():
+            total += order_product.get_amount_saved()
+        return total
