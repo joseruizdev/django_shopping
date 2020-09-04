@@ -3,13 +3,16 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, DetailView, View
-from core.models import Product, OrderProduct, Order
+from core.models import Product, OrderProduct, Order, Category
 from django.utils import timezone
 from django.contrib import messages
 
-class HomeView(ListView):
-    model = Product
-    template_name = 'home.html'
+def home_view(request):
+    context = {
+        'products': Product.objects.all(),
+        'categories': Category.objects.all()
+    }
+    return render(request, "home.html", context)
 
 def product_list(request):
     context = {
@@ -21,6 +24,17 @@ class ShopView(ListView):
     model = Product
     paginate_by = 12
     template_name = 'shop.html'
+
+class ProductsByCategoryListView(ListView):
+    model = Product
+    template_name = "category-products.html"
+    def get_queryset(self):
+        self.category = get_object_or_404(Category, slug=self.kwargs['slug'])
+        return Product.objects.filter(category=self.category)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['category'] = get_object_or_404(Category, slug=self.kwargs['slug'])
+        return context
 
 class CartView(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):

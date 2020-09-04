@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block head_title %}
-Shop
+Category
 {% endblock head_title %}
 
 {% block content %}
@@ -10,9 +10,9 @@ Shop
 
 {% include "partials/main-menu.html" %}
 
-{% include "partials/page-header.html" with page_name="Shop" %}
+{% include "partials/page-header.html" with page_name="Category" %}
 
-{% include "partials/products.html" with products=object_list %}
+{% include "partials/products.html" %}
 
 {% include "partials/footer.html" %}
 

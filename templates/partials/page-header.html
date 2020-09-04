@@ -1,0 +1,24 @@
+<section class="page-header">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="content">
+                    {% if category %}
+                    <h1 class="page-name">{{ category.name }}</h1>
+                    {% else %}
+                    <h1 class="page-name">{{ page_name }}</h1>
+                    {% endif %}
+					
+					<ol class="breadcrumb">
+						<li><a href="{% url 'core:home' %}">Home</a></li>
+						{% if category %}
+						<li class="active">{{ category.name }}</li>
+						{% else %}
+						<li class="active">{{ page_name }}</li>
+						{% endif %}
+					</ol>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

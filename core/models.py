@@ -2,23 +2,36 @@ from django.db import models
 from django.conf import settings
 from django.shortcuts import reverse
 
-CATEGORY_CHOICES = (
-    ('S', 'Shirt'),
-    ('SW', 'Sports Wear'),
-    ('OW', 'Outwear')
-)
-
 LABEL_CHOICES = (
     ('new', 'New'),
     ('sold-out', 'Sold Out')
 )
+
+class Category(models.Model):
+    name = models.CharField(max_length=50)
+    image = models.ImageField(upload_to='categories', null=True)
+    slug = models.SlugField()
+
+    class Meta:
+        verbose_name_plural = 'categories'
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse(
+            'core:products-by-category',
+            kwargs={
+                'slug': self.slug
+            }
+        )
 
 class Product(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
     price = models.DecimalField(max_digits=7, decimal_places=2)
     discount_price = models.DecimalField(max_digits=7, decimal_places=2, blank=True, null=True)
-    # TODO: Category Model and foreign key
+    category = models.ForeignKey(Category, null=True, on_delete=models.SET_NULL)
     label = models.CharField(choices=LABEL_CHOICES, max_length=20, blank=True, null=True)
     slug = models.SlugField(default='product-slug')
     image_1 = models.ImageField(null=True, upload_to='products')

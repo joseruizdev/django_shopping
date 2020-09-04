@@ -9,10 +9,10 @@
 				</ol>
 			</div>
 			<div class="col-md-6">
-				<ol class="product-pagination text-right">
+				<!-- <ol class="product-pagination text-right">
 					<li><a href="#"><i class="tf-ion-ios-arrow-left"></i> Next </a></li>
 					<li><a href="#">Preview <i class="tf-ion-ios-arrow-right"></i></a></li>
-				</ol>
+				</ol> -->
 			</div>
 		</div>
 		<div class="row mt-20">
@@ -114,7 +114,7 @@
 					</div> -->
 					<div class="product-category">
 						<span>Category:</span>
-						<a href="#">{{ product.get_category_display }}</a>
+						<a href="{{ product.category.get_absolute_url }}">{{ product.category.name }}</a>
 						
 					</div>
                     <a href="{{ product.get_add_to_cart_url }}" class="btn btn-main mt-20">Add To Cart</a>
