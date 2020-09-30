@@ -3,9 +3,10 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, DetailView, View
-from core.models import Product, OrderProduct, Order, Category
+from core.models import Product, OrderProduct, Order, Category, BillingAddress
 from django.utils import timezone
 from django.contrib import messages
+from core.forms import CheckoutForm
 
 def home_view(request):
     context = {
@@ -47,6 +48,56 @@ class CartView(LoginRequiredMixin, View):
         except ObjectDoesNotExist:
             messages.error(self.request, "You don't have an active order")
             return redirect("/")
+
+class CheckoutView(View):
+    def get(self, *args, **kwargs):
+        form = CheckoutForm()
+        context = {
+            'form': form
+        }
+        return render(self.request, "checkout.html", context)
+
+    def post(self, *args, **kwargs):
+        form = CheckoutForm(self.request.POST or None)
+
+        try:
+            order = Order.objects.get(user=self.request.user, ordered=False)
+            if form.is_valid():
+                street = form.cleaned_data.get('street')
+                internal_number = form.cleaned_data.get('internal_number')
+                external_number = form.cleaned_data.get('external_number')
+                suburb = form.cleaned_data.get('suburb')
+                city = form.cleaned_data.get('city')
+                country = form.cleaned_data.get('country')
+                state = form.cleaned_data.get('state')
+                zip_code = form.cleaned_data.get('zip_code')
+                phone_number = form.cleaned_data.get('phone_number')
+                # TODO: add functionality for these fields.
+                # same_billing_address = form.cleaned_data.get('same_billing_address')
+                # save_info = form.cleaned_data.get('save_info')
+                payment_option = form.cleaned_data.get('payment_option')
+                billing_address = BillingAddress(
+                    user=self.request.user,
+                    street=street,
+                    internal_number=internal_number,
+                    external_number=external_number,
+                    suburb=suburb,
+                    city=city,
+                    country=country,
+                    state=state,
+                    zip_code=zip_code,
+                    phone_number=phone_number,
+                )
+                billing_address.save()
+                order.billing_address = billing_address
+                order.save()
+                # TODO: add a redirect to the selected payment option.
+                return redirect('core:checkout')
+            messages.warning(self.request, "Checkout failed!")
+            return redirect('core:checkout')
+        except ObjectDoesNotExist:
+            messages.error(self.request, "You don't have an active order")
+            return redirect("core:checkout")
 
 class ProductView(DetailView):
     model = Product

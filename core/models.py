@@ -98,6 +98,7 @@ class Order(models.Model):
     products = models.ManyToManyField(OrderProduct)
     ordered = models.BooleanField(default=False)
     ordered_date = models.DateTimeField()
+    billing_address = models.ForeignKey('BillingAddress', on_delete=models.SET_NULL,  blank=True, null=True)
 
     def __str__(self):
         return f"Ordered by {self.user.username}"
@@ -113,3 +114,19 @@ class Order(models.Model):
         for order_product in self.products.all():
             total += order_product.get_amount_saved()
         return total
+
+class BillingAddress(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,  on_delete=models.CASCADE)
+
+    street = models.CharField(max_length=100)
+    internal_number = models.CharField(max_length=5, blank=True, null=True)
+    external_number = models.CharField(max_length=5)
+    suburb = models.CharField(max_length=100)
+    city = models.CharField(max_length=100)
+    country = models.CharField(max_length=150)
+    state = models.CharField(max_length=100)
+    zip_code = models.CharField(max_length=50)
+    phone_number = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.user.username
